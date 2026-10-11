@@ -165,7 +165,8 @@ class App {
 
   Future<bool> isAutoStartEnabled() async {
     if (!Platform.isAndroid) return false;
-    return await methodChannel.invokeMethod<bool>('isAutoStartEnabled') ?? false;
+    return await methodChannel.invokeMethod<bool>('isAutoStartEnabled') ??
+        false;
   }
 
   Future<bool> setAutoStart(bool enable) async {
