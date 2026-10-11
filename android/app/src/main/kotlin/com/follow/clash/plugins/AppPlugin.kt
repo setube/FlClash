@@ -186,6 +186,15 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
                 result.success(openAppSettings())
             }
 
+            "isAutoStartEnabled" -> {
+                result.success(isAutoStartEnabled())
+            }
+
+            "setAutoStart" -> {
+                val enable = call.argument<Boolean>("enable") ?: false
+                result.success(setAutoStart(enable))
+            }
+
             "didCrashOnPreviousExecution" -> reply(result) {
                 GlobalState.didCrashOnPreviousExecution()
             }
@@ -264,6 +273,36 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
                 data = "package:${GlobalState.application.packageName}".toUri()
             }
             activity.startActivity(intent)
+            true
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    private fun isAutoStartEnabled(): Boolean {
+        val state = GlobalState.application.packageManager.getComponentEnabledSetting(
+            Components.bootReceiver,
+        )
+        return state == android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+    }
+
+    private fun setAutoStart(enable: Boolean): Boolean {
+        return try {
+            val newState = if (enable) {
+                android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            } else {
+                android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            }
+            GlobalState.application.packageManager.setComponentEnabledSetting(
+                Components.bootReceiver,
+                newState,
+                android.content.pm.PackageManager.DONT_KILL_APP,
+            )
+            if (enable) {
+                WatchdogReceiver.schedule(GlobalState.application)
+            } else {
+                WatchdogReceiver.cancel(GlobalState.application)
+            }
             true
         } catch (_: Exception) {
             false

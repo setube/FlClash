@@ -58,6 +58,8 @@
   "silentLaunchDesc": "启动时不显示窗口",
   "autoRun": "自动运行",
   "autoRunDesc": "应用打开时自动运行",
+  "bootAutoStart": "开机自启动",
+  "bootAutoStartDesc": "开机后自动启动应用",
   "logcat": "日志捕获",
   "logcatDesc": "禁用将会隐藏日志入口",
   "autoCheckUpdate": "自动检查更新",

@@ -58,6 +58,8 @@
   "silentLaunchDesc": "起動時にウィンドウを表示しません",
   "autoRun": "自動実行",
   "autoRunDesc": "アプリを開いたときに自動的に実行します",
+  "bootAutoStart": "起動時の自動起動",
+  "bootAutoStartDesc": "デバイス起動後にアプリを自動的に起動します",
   "logcat": "ログキャプチャ",
   "logcatDesc": "無効にするとログの入り口が非表示になります",
   "autoCheckUpdate": "更新の自動チェック",

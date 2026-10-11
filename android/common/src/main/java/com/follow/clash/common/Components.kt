@@ -13,4 +13,7 @@ object Components {
 
     val serviceBroadcastReceiver =
         ComponentName(GlobalState.packageName, "${PACKAGE_NAME}.ServiceBroadcastReceiver")
+
+    val bootReceiver =
+        ComponentName(GlobalState.packageName, "${PACKAGE_NAME}.BootReceiver")
 }

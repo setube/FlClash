@@ -318,6 +318,7 @@ class GeneralView extends ConsumerWidget {
           update: (state, value) =>
               state.copyWith(showNotificationStopAction: value),
         ),
+        const BootAutoStartItem(),
       ],
     ];
   }
@@ -486,6 +487,44 @@ class GeneralView extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BootAutoStartItem extends StatefulWidget {
+  const BootAutoStartItem({super.key});
+
+  @override
+  State<BootAutoStartItem> createState() => _BootAutoStartItemState();
+}
+
+class _BootAutoStartItemState extends State<BootAutoStartItem> {
+  bool? _enabled;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final enabled = await app?.isAutoStartEnabled() ?? false;
+    if (mounted) setState(() => _enabled = enabled);
+  }
+
+  Future<void> _toggle(bool value) async {
+    final success = await app?.setAutoStart(value) ?? false;
+    if (success && mounted) setState(() => _enabled = value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.appLocalizations;
+    return ListItem.toggle(
+      title: Text(l.bootAutoStart),
+      subtitle: Text(l.bootAutoStartDesc),
+      value: _enabled ?? false,
+      onChanged: _enabled == null ? null : _toggle,
     );
   }
 }

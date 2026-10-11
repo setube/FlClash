@@ -58,6 +58,8 @@
   "silentLaunchDesc": "Start without showing the window",
   "autoRun": "Auto run",
   "autoRunDesc": "Run automatically when the app opens",
+  "bootAutoStart": "Boot auto start",
+  "bootAutoStartDesc": "Launch app automatically on device boot",
   "logcat": "Logcat",
   "logcatDesc": "Disabling hides the log entry point",
   "autoCheckUpdate": "Auto check for updates",
