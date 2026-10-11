@@ -1034,6 +1034,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "shrink": MessageLookupByLibrary.simpleMessage("紧凑"),
     "sidebarBlur": MessageLookupByLibrary.simpleMessage("侧边栏背景模糊"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage("侧边栏透出窗口后方模糊的桌面"),
+    "bootAutoStart": MessageLookupByLibrary.simpleMessage("开机自启动"),
+    "bootAutoStartDesc": MessageLookupByLibrary.simpleMessage("开机后自动启动应用"),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("静默启动"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage("启动时不显示窗口"),
     "singleAdd": MessageLookupByLibrary.simpleMessage("单条添加"),

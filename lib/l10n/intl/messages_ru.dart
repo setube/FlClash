@@ -1440,6 +1440,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
       "Показывать сквозь боковую панель размытый рабочий стол за окном",
     ),
+    "bootAutoStart": MessageLookupByLibrary.simpleMessage(
+      "Автозапуск при загрузке",
+    ),
+    "bootAutoStartDesc": MessageLookupByLibrary.simpleMessage(
+      "Автоматически запускать приложение при загрузке устройства",
+    ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("Тихий запуск"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
       "Запускаться без показа окна",

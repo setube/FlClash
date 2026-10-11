@@ -1163,6 +1163,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
       "ウィンドウ背後のデスクトップをぼかしてサイドバーに透過します",
     ),
+    "bootAutoStart": MessageLookupByLibrary.simpleMessage("起動時に自動起動"),
+    "bootAutoStartDesc": MessageLookupByLibrary.simpleMessage(
+      "デバイス起動時にアプリを自動的に起動します",
+    ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("サイレント起動"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
       "起動時にウィンドウを表示しません",

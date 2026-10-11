@@ -1367,6 +1367,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
       "Show the blurred desktop behind the window through the sidebar",
     ),
+    "bootAutoStart": MessageLookupByLibrary.simpleMessage("Boot auto start"),
+    "bootAutoStartDesc": MessageLookupByLibrary.simpleMessage(
+      "Launch app automatically on device boot",
+    ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("Silent launch"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
       "Start without showing the window",

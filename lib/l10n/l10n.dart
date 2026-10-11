@@ -1565,6 +1565,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Boot auto start`
+  String get bootAutoStart {
+    return Intl.message(
+      'Boot auto start',
+      name: 'bootAutoStart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Launch app automatically on device boot`
+  String get bootAutoStartDesc {
+    return Intl.message(
+      'Launch app automatically on device boot',
+      name: 'bootAutoStartDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `TCP keep-alive interval`
   String get keepAliveIntervalDesc {
     return Intl.message(
