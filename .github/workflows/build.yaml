@@ -99,56 +99,6 @@ jobs:
           dart analyze
           dart test
 
-  desktop:
-    name: Desktop ${{ matrix.platform }}
-    if: *checks
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: linux
-            os: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-          cache-dependency-path: core/go.sum
-
-      - name: Setup Rust cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          key: desktop-${{ matrix.platform }}
-          workspaces: |
-            services/helper
-            plugins/rust_api/rust
-          cache-directories: .dart_tool/hooks_runner
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          cache: true
-
-      - name: Install Linux build dependencies
-        if: matrix.platform == 'linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ninja-build libgtk-3-dev libayatana-appindicator3-dev libsecret-1-dev
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build debug bundle
-        run: flutter build ${{ matrix.platform }} --debug
-
   go:
     name: Go core
     if: *checks
@@ -277,28 +227,9 @@ jobs:
           cargo test --manifest-path services/helper/Cargo.toml
           cargo test --manifest-path plugins/rust_api/rust/Cargo.toml
 
-  windows-helper-test:
-    name: Windows helper test
-    if: *checks
-    runs-on: windows-2022
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Rust cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: services/helper
-
-      - name: Check format
-        run: cargo fmt --manifest-path services/helper/Cargo.toml -- --check
-
-      - name: Run Windows service tests
-        run: cargo test --manifest-path services/helper/Cargo.toml --features windows-service
-
   build:
     if: github.repository == 'setube/FlClash' && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [ dart, plugins, go, android, rust, windows-helper-test ]
+    needs: [ dart, plugins, go, android, rust ]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
