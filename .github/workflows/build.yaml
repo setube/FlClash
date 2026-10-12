@@ -36,9 +36,14 @@ jobs:
       - name: Test comment density hook
         run: bash tool/check_comment_density_test.sh
 
-      - name: Skip native build hooks
+      - name: Skip setup build hook
         run: |
-          yq -i '.hooks.user_defines.setup.build_assets = false | .hooks.user_defines.rust_api.build_assets = false' pubspec.yaml
+          yq -i '.hooks.user_defines.setup.build_assets = false' pubspec.yaml
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: plugins/rust_api/rust
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
