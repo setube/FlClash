@@ -238,22 +238,12 @@ jobs:
             os: ubuntu-latest
 
     steps:
-      - name: Setup rust
-        if: startsWith(matrix.os, 'windows-11-arm')
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://win.rustup.rs/aarch64" -OutFile rustup-init.exe
-          .\rustup-init.exe -y --default-toolchain stable
-          $cargoPath = "$env:USERPROFILE\.cargo\bin"
-          Add-Content $env:GITHUB_PATH $cargoPath
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Setup Android Signing
-        if: startsWith(matrix.platform,'android')
         run: |
           echo "${{ secrets.KEYSTORE }}" | base64 --decode > android/app/keystore.jks
           echo "${{ secrets.SERVICE_JSON }}" | base64 --decode > android/app/google-services.json
@@ -272,20 +262,13 @@ jobs:
       - name: Setup Rust cache
         uses: Swatinem/rust-cache@v2
         with:
-          key: ${{ matrix.platform }}-${{ matrix.arch || 'all' }}
+          key: android-all
           workspaces: services/helper
           cache-directories: .dart_tool/hooks_runner
 
       - name: Setup Gradle
-        if: startsWith(matrix.platform,'android')
         uses: gradle/actions/setup-gradle@v6
 
-      - name: Enable git long paths (Windows)
-        if: startsWith(matrix.os, 'windows')
-        run: git config --global core.longpaths true
-
-      # Stable publishes no Windows or Linux arm64 archive; master makes the action
-      # clone the SDK at the pinned tag and let it fetch the host's own Dart SDK.
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -293,14 +276,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
-      - name: Setup Xcode
-        if: startsWith(matrix.platform,'macos')
-        run: |
-          sudo xcode-select -s /Applications/Xcode_26.3.app || sudo xcode-select -s /Applications/Xcode_26.2.app
-          xcodebuild -version
-
       - name: Setup NDK
-        if: startsWith(matrix.platform,'android')
         uses: nttld/setup-ndk@v1
         id: build-ndk
         with:
@@ -313,20 +289,15 @@ jobs:
           flutter --version
           flutter pub get
 
-      # See .agents/flutter-upgrade.md before bumping FLUTTER_VERSION.
-      - name: Disable Impeller on Intel macOS
-        if: matrix.platform == 'macos' && matrix.arch == 'amd64'
-        run: plutil -replace FLTEnableImpeller -bool NO macos/Runner/Info.plist
-
       - name: Setup
         env:
           ANDROID_NDK_HOME: ${{ steps.build-ndk.outputs.ndk-path }}
-        run: dart setup.dart ${{ matrix.platform }} ${{ env.IS_STABLE == 'true' && '--env stable' || '' }} -v
+        run: dart setup.dart android ${{ env.IS_STABLE == 'true' && '--env stable' || '' }} -v
 
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: artifact-${{ matrix.platform }}${{ matrix.arch && format('-{0}', matrix.arch) }}
+          name: artifact-android
           path: ./dist
           overwrite: true
 
@@ -380,6 +351,12 @@ jobs:
         run: |
           cd ./dist
           sha256sum ./* > SHA256SUMS
+
+      - name: Delete existing release if any
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete "${{ github.ref_name }}" --repo "${{ github.repository }}" --yes || true
 
       - name: Release
         uses: softprops/action-gh-release@v2
